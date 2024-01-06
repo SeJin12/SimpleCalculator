@@ -5,113 +5,199 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [input, setInput] = useState<string>('');
+  const [result, setResult] = useState<string>('');
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const convertSign = (value: string) => {
+    value = value.replaceAll('×', '*');
+    value = value.replaceAll('÷', '/');
+    return value;
   };
 
+  const handleButtonPress = (value: number | string) => {
+    let operation = '';
+    if (value === '=' || value === '%') {
+      try {
+        operation = eval(convertSign(input)).toString();
+      } catch (error) {
+        setResult('Error');
+      }
+    }
+
+    if (value === '=') {
+      setResult(operation);
+    } else if (value === '%') {
+      setResult(((Number(operation) * 1.0) / 100.0).toFixed(2).toString());
+    } else if (value === 'C') {
+      setInput('');
+      setResult('');
+    } else if (value === 'DEL') {
+      setInput(prevInput => prevInput.slice(0, prevInput.length - 1));
+    } else if (value === '↑') {
+      setInput(result);
+      setResult('');
+    } else if (value === 'H') {
+      //
+    } else {
+      setInput(prevInput => prevInput + value);
+    }
+  };
+
+  const renderButton = (value: number | string, style = {}) => (
+    <TouchableOpacity
+      style={{flex: 1, justifyContent: 'center', width: '100%'}}
+      onPress={() => handleButtonPress(value)}>
+      <Text style={styles.buttonText}>{value}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1.2, backgroundColor: 'transparent', padding: 5}}>
+        <TextInput
+          style={styles.input}
+          value={input}
+          editable={false}
+          placeholder="0"
+          placeholderTextColor="#888"
+        />
+      </View>
+      <View style={{flex: 1.2, backgroundColor: 'transparentew', padding: 5}}>
+        <TextInput
+          style={[styles.input, {color: '#2E64FE'}]}
+          value={result}
+          editable={false}
+          placeholder="Result"
+          placeholderTextColor="#888"
+        />
+      </View>
+      <View style={{flex: 7, padding: 5}}>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('C')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('%')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('.')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('DEL')}
+          </View>
         </View>
-      </ScrollView>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('(')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton(')')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('H')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('+')}
+          </View>
+        </View>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(7)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(8)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(9)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('-')}
+          </View>
+        </View>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(4)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(5)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(6)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('×')}
+          </View>
+        </View>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(1)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(2)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(3)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('÷')}
+          </View>
+        </View>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('↑')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton(0)}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+            {renderButton('00')}
+          </View>
+          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+            {renderButton('=')}
+          </View>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
+  input: {
+    flex: 1,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
     fontSize: 24,
-    fontWeight: '600',
+    padding: 7,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  button: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#0cfe1c',
+    margin: 2,
+    borderRadius: 33,
   },
-  highlight: {
-    fontWeight: '700',
+  buttonText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  stringButton: {
+    backgroundColor: '#90ffb8',
+  },
+  numberButton: {
+    backgroundColor: '#26ff00',
   },
 });
 
