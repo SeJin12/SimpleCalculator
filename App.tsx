@@ -25,20 +25,23 @@ function App(): React.JSX.Element {
     return value;
   };
 
+  const convertComma = (str :string) => {
+    return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   const handleButtonPress = (value: number | string) => {
     let operation = '';
-    if (value === '=' || value === '%') {
+    if (value === '=') {
       try {
-        operation = eval(convertSign(input)).toString();
+        let tmp = input.replaceAll(',', '');
+        operation = eval(convertSign(tmp)).toString();
       } catch (error) {
         setResult('Error');
       }
     }
 
     if (value === '=') {
-      setResult(operation);
-    } else if (value === '%') {
-      setResult(((Number(operation) * 1.0) / 100.0).toFixed(2).toString());
+      setResult(convertComma(operation));
     } else if (value === 'C') {
       setInput('');
       setResult('');
@@ -50,7 +53,10 @@ function App(): React.JSX.Element {
     } else if (value === 'H') {
       //
     } else {
-      setInput(prevInput => prevInput + value);
+      let tmp = input + value;
+      tmp = tmp.replaceAll(',', '');
+      
+      setInput(convertComma(tmp));
     }
   };
 
@@ -73,9 +79,9 @@ function App(): React.JSX.Element {
           placeholderTextColor="#888"
         />
       </View>
-      <View style={{flex: 1.2, backgroundColor: 'transparentew', padding: 5}}>
+      <View style={{flex: 1.2, backgroundColor: 'transparent', padding: 5}}>
         <TextInput
-          style={[styles.input, {color: '#2E64FE'}]}
+          style={[styles.input, {color: '#FFA7A7'}]}
           value={result}
           editable={false}
           placeholder="Result"
@@ -84,30 +90,30 @@ function App(): React.JSX.Element {
       </View>
       <View style={{flex: 7, padding: 5}}>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('C')}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
-            {renderButton('%')}
+          <View style={Object.assign({}, styles.button)}>
+            {renderButton('↑')}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('.')}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('DEL')}
           </View>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('(')}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton(')')}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('H')}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('+')}
           </View>
         </View>
@@ -121,7 +127,7 @@ function App(): React.JSX.Element {
           <View style={Object.assign({}, styles.button, styles.numberButton)}>
             {renderButton(9)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('-')}
           </View>
         </View>
@@ -135,7 +141,7 @@ function App(): React.JSX.Element {
           <View style={Object.assign({}, styles.button, styles.numberButton)}>
             {renderButton(6)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('×')}
           </View>
         </View>
@@ -149,21 +155,15 @@ function App(): React.JSX.Element {
           <View style={Object.assign({}, styles.button, styles.numberButton)}>
             {renderButton(3)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('÷')}
           </View>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
-            {renderButton('↑')}
-          </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.zeroButton)}>
             {renderButton(0)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
-            {renderButton('00')}
-          </View>
-          <View style={Object.assign({}, styles.button, styles.stringButton)}>
+          <View style={Object.assign({}, styles.button)}>
             {renderButton('=')}
           </View>
         </View>
@@ -183,22 +183,22 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#0cfe1c',
     margin: 2,
-    borderRadius: 33,
+    borderRadius: 5,
+    backgroundColor: '#FFEE90',
   },
   buttonText: {
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  stringButton: {
-    backgroundColor: '#90ffb8',
-  },
   numberButton: {
-    backgroundColor: '#26ff00',
+    backgroundColor: '#FFFFB4',
   },
+  zeroButton: {
+    flex: 3
+    ,backgroundColor: '#FFFFB4'
+  }
 });
 
 export default App;
