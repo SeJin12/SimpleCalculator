@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useState} from 'react';
 import {
   SafeAreaView,
@@ -25,9 +18,9 @@ function App(): React.JSX.Element {
     return value;
   };
 
-  const convertComma = (str :string) => {
+  const convertComma = (str: string) => {
     return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
+  };
 
   const handleButtonPress = (value: number | string) => {
     let operation = '';
@@ -55,7 +48,7 @@ function App(): React.JSX.Element {
     } else {
       let tmp = input + value;
       tmp = tmp.replaceAll(',', '');
-      
+
       setInput(convertComma(tmp));
     }
   };
@@ -90,82 +83,58 @@ function App(): React.JSX.Element {
       </View>
       <View style={{flex: 7, padding: 5}}>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('C')}
-          </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('↑')}
-          </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('.')}
-          </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('DEL')}
-          </View>
+          <View style={styles.button}>{renderButton('C')}</View>
+          <View style={styles.button}>{renderButton('↑')}</View>
+          <View style={styles.button}>{renderButton('.')}</View>
+          <View style={styles.button}>{renderButton('DEL')}</View>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('(')}
-          </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton(')')}
-          </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('H')}
-          </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('+')}
-          </View>
+          <View style={styles.button}>{renderButton('(')}</View>
+          <View style={styles.button}>{renderButton(')')}</View>
+          <View style={styles.button}>{renderButton('H')}</View>
+          <View style={styles.button}>{renderButton('+')}</View>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(7)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(8)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(9)}
           </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('-')}
-          </View>
+          <View style={styles.button}>{renderButton('-')}</View>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(4)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(5)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(6)}
           </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('×')}
-          </View>
+          <View style={styles.button}>{renderButton('×')}</View>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(1)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(2)}
           </View>
-          <View style={Object.assign({}, styles.button, styles.numberButton)}>
+          <View style={StyleSheet.compose(styles.button, styles.numberButton)}>
             {renderButton(3)}
           </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('÷')}
-          </View>
+          <View style={styles.button}>{renderButton('÷')}</View>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
           <View style={StyleSheet.compose(styles.button, styles.zeroButton)}>
             {renderButton(0)}
           </View>
-          <View style={Object.assign({}, styles.button)}>
-            {renderButton('=')}
-          </View>
+          <View style={styles.button}>{renderButton('=')}</View>
         </View>
       </View>
     </SafeAreaView>
@@ -196,9 +165,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFB4',
   },
   zeroButton: {
-    flex: 3
-    ,backgroundColor: '#FFFFB4'
-  }
+    flex: 3,
+    backgroundColor: '#FFFFB4',
+  },
 });
 
 export default App;
